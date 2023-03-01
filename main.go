@@ -11,7 +11,6 @@ func main() {
 	ctx := context.Background()
 
 	Liubei(ctx, 9)
-
 	// Output:
 	// 刘备: 曹操来了 9 万人
 	// 关羽(1) <-: 曹操来了 9 万人
@@ -21,29 +20,25 @@ func main() {
 
 func Liubei(ctx context.Context, n int) {
 
-	fmt.Printf("刘备: 曹操来了 %d 万人\n", n)
-
-	// 使用 context 重新包裹
+	// 注入到 context
 	ctx = info.WithEnemyContext(ctx, n)
 
+	fmt.Printf("刘备: 曹操来了 %d 万人\n", n)
 	Guanyu(ctx)
-
 }
 
 func Guanyu(ctx context.Context) {
 	n := info.FromEnemyContext(ctx)
-
 	fmt.Printf("关羽(1) <-: 曹操来了 %d 万人\n", n)
-	// 扩大数量
+
 	if n%2 == 1 {
+		// 扩大数量
 		n = n * 10
+		// 重新注入到 context
+		ctx = info.WithEnemyContext(ctx, n)
 	}
 
 	fmt.Printf("关羽(2) ->: 曹操来了 %d 万人\n", n)
-
-	// 使用 context 重新包裹
-	ctx = info.WithEnemyContext(ctx, n)
-
 	Zhangfei(ctx)
 }
 
